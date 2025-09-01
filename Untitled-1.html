@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>辩论计时器</title>
+  <style>
+    :root {
+      --primary-color: #b84730;
+      --secondary-color: #2c3e50;
+      --accent-color: #37788c;
+      --text-color: #ffffff;
+      --background-overlay: rgba(44, 62, 80, 0.85);
+      --success-color: #27ae60;
+      --warning-color: #f39c12;
+      --danger-color: #e74c3c;
+      --question-color: #3498db;
+      --answer-color: #9b59b6;
+    }
+    
+    * {
+      box-sizing: border-box;
+      transition: all 0.3s ease;
+    }
+    
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      overflow: hidden;
+      font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif;
+      background: var(--secondary-color) url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect fill="%2337788C" width="100" height="100"/><path fill="%232c3e50" d="M0 0L100 100M100 0L0 100" stroke-width="0.5"/></svg>');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      color: var(--text-color);
+      text-align: center;
+    }
+    
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--background-overlay);
+      z-index: -1;
+    }
+    
+    #controls {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 100;
+    }
+    
+    #navigation {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 100;
+    }
+    
+    button {
+      font-size: 1em;
+      margin: 0 5px;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      background-color: rgba(255, 255, 255, 0.9);
+      color: var(--primary-color);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    button:hover {
+      background-color: #ffffff;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
+    
+    button:active {
+      transform: translateY(0);
+    }
+    
+    .container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      padding: 20px;
+    }
+    
+    /* 开始页面样式 */
+    #start-scene {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      max-width: 900px;
+      padding: 30px;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+    
+    .start-content {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      gap: 30px;
+    }
+    
+    .tournament-badge {
+      flex: 1;
+      min-width: 250px;
+      height: 350px;
+      border: 4px solid white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 2.5em;
+      text-align: center;
+      padding: 20px;
+      background: rgba(183, 71, 48, 0.2);
+      border-radius: 10px;
+    }
+    
+    .match-info {
+      flex: 2;
+      min-width: 300px;
+      text-align: center;
+      padding: 20px;
+    }
+    
+    .tournament-name {
+      font-size: 2.8em;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+    
+    .match-type {
+      font-size: 2em;
+      padding-bottom: 10px;
+      border-bottom: 2px solid white;
+      margin-bottom: 20px;
+    }
+    
+    .debate-topic {
+      font-size: 1.8em;
+      line-height: 1.5;
+      margin: 20px 0;
+    }
+    
+    .start-button {
+      margin-top: 30px;
+      padding: 15px 40px;
+      font-size: 1.5em;
+    }
+    
+    /* 计时页面样式 */
+    #timer-scene {
+      display: none;
+      width: 100%;
+      max-width: 800px;
+    }
+    
+    #scene-name {
+      font-size: 3.5em;
+      font-weight: bold;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    
+    .line {
+      width: 80%;
+      height: 3px;
+      background: linear-gradient(to right, transparent, white, transparent);
+      margin: 20px auto;
+    }
+    
+    #timer {
+      font-size: 8em;
+      font-weight: bold;
+      margin: 20px 0;
+      text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.6);
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 4px;
+    }
+    
+    .time-warning {
+      color: #ffcc00 !important;
+    }
+    
+    .time-critical {
+      color: #eb0000 !important;
+      animation: pulse 1s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.7; }
+      100% { opacity: 1; }
+    }
+    
+    .buttons {
+      margin: 20px 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+    
+    .timer-btn {
+      font-size: 1.2em;
+      padding: 12px 25px;
+      min-width: 120px;
+    }
+    
+    #start-btn {
+      background-color: rgba(255, 255, 255, 0.87);
+      color: rgb(0, 0, 0);
+    }
+    
+    #pause-btn {
+      background-color: rgba(255, 255, 255, 0.9);
+      color: rgb(0, 0, 0);
+    }
+    
+    #reset-btn {
+      background-color: rgba(255, 255, 255, 0.9);
+      color: rgb(0, 0, 0);
+    }
+    
+    #debate-topic {
+      font-size: 1.3em;
+      margin-top: 20px;
+      padding: 15px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 8px;
+    }
+    
+    /* 双计时器样式 - 质询环节专用 */
+    #inquisition-scene {
+      display: none;
+      width: 100%;
+      max-width: 1000px;
+    }
+    #inquisition-name {
+  font-size: 3em;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+#debate-topic,
+#inquisition-topic {
+  font-size: 2em;
+  font-weight: bold;
+}
+    .double-timer {
+      display: flex;
+      justify-content: space-around;
+      gap: 30px;
+      margin: 30px 0;
+      flex-wrap: wrap;
+    }
+    
+.inquisition-controls .reset-btn {
+  background-color: #ffffff !important; /* 红色 */
+  color: #000000 !important;
+}
+.inquisition-controls .start-btn {
+  background-color: #ffffff !important; /* 绿色 */
+  color: #000000 !important;
+}
+
+    .timer-box {
+      flex: 1;
+      min-width: 300px;
+      background: rgb(39, 38, 38);
+      border-radius: 15px;
+      padding: 25px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+    
+    .question-timer {
+      border-top: 5px solid var(--question-color);
+    }
+    
+    .answer-timer {
+      border-top: 5px solid var(--answer-color);
+    }
+    
+    .timer-title {
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+    
+    .question-title {
+      color: var(--question-color);
+    }
+    
+    .answer-title {
+      color: var(--answer-color);
+    }
+    
+    .timer-display {
+      font-size: 4.5rem;
+      font-weight: bold;
+      margin: 20px 0;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 4px;
+      text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.6);
+    }
+    
+    .inquisition-controls {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin: 25px 0;
+    }
+    
+    .round-info {
+      font-size: 1.2rem;
+      margin: 15px 0;
+      color: var(--accent-color);
+    }
+    
+    /* 响应式设计 */
+    @media (max-width: 768px) {
+      #scene-name {
+        font-size: 2.5em;
+      }
+      
+      #timer {
+        font-size: 5em;
+      }
+      
+      .tournament-badge {
+        height: 250px;
+        font-size: 2em;
+      }
+      
+      .tournament-name {
+        font-size: 2.2em;
+      }
+      
+      .match-type {
+        font-size: 1.6em;
+      }
+      
+      .debate-topic {
+        font-size: 1.4em;
+      }
+      
+      .timer-btn {
+        font-size: 1em;
+        padding: 10px 15px;
+        min-width: 100px;
+      }
+      
+      button {
+        font-size: 0.9em;
+        padding: 6px 12px;
+      }
+      
+      .timer-display {
+        font-size: 3.5rem;
+      }
+      
+      .timer-title {
+        font-size: 1.5rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .start-content {
+        flex-direction: column;
+      }
+      
+      .tournament-badge {
+        width: 100%;
+        height: 200px;
+      }
+      
+      #scene-name {
+        font-size: 2em;
+      }
+      
+      #timer {
+        font-size: 4em;
+      }
+      
+      .buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .timer-btn {
+        width: 80%;
+        margin: 5px 0;
+      }
+      
+      .double-timer {
+        gap: 20px;
+      }
+      
+      .timer-box {
+        min-width: 100%;
+      }
+    }
+    #navigation button {
+  background-color: #ffffff !important; /* 绿色 */
+  color: #000000 !important;
+}
+#navigation button:hover {
+  background-color: #8b8b8b !important;
+}
+#controls button {
+  background-color: #ffffff !important; /* 红色 */
+  color: #000000 !important;
+}
+#controls button:hover {
+  background-color: #8b8b8b !important;
+}
+.round-info {
+  font-size: 1.2rem;
+  margin: 15px 0;
+  color: #ffffff; /* 这里设置你想要的颜色，比如橙色 */
+}
+.question-title {
+  color: #ffffff; /* 这里设置你想要的颜色，比如绿色 */
+}
+.answer-title {
+  color: #ffffff; /* 这里设置你想要的颜色，比如红色 */
+}
+  </style>
+</head>
+<body>
+  <div class="overlay"></div>
+  
+  <div id="controls">
+    <button onclick="prevScene()">← 上一页</button>
+  </div>
+  
+  <div id="navigation">
+    <button onclick="nextScene()">下一页 →</button>
+  </div>
+
+  <div class="container">
+    <!-- 开始页面 -->
+    <div id="start-scene">
+      <div class="start-content">
+        <div class="tournament-badge">初学杯</div>
+        <div class="match-info">
+          <div class="match-type">友谊赛</div>
+          <div class="debate-topic">
+            价值型辩题/政策型辩题<br />是更好的辩论入门题型
+          </div>
+        </div>
+      </div>
+      <button class="start-button" onclick="startDebate()">开始辩论</button>
+    </div>
+
+    <!-- 常规计时页面 -->
+    <div id="timer-scene">
+      <div id="scene-name"></div>
+      <div class="line"></div>
+      <div id="timer">00:00</div>
+      <div class="buttons">
+        <button id="start-btn" class="timer-btn" onclick="startTimer()">开始</button>
+        <button id="pause-btn" class="timer-btn" onclick="pauseTimer()">暂停</button>
+        <button id="reset-btn" class="timer-btn" onclick="resetTimer()">重置</button>
+      </div>
+   
+      
+    </div>
+
+    <!-- 质询环节双计时器页面 -->
+    <div id="inquisition-scene">
+      <div id="inquisition-name"></div>
+      <div class="round-info" id="round-info">1/2</div>
+      <div class="line"></div>
+      <div class="double-timer">
+        
+        <!-- 提问计时器 -->
+        <div>
+      <div class="timer-title question-title">提问</div>
+      <div class="timer-display" id="question-timer">00:10</div>
+      <div class="inquisition-controls">
+        <button class="timer-btn reset-btn" onclick="resetQuestionTimer()">重置</button>
+        <button class="timer-btn start-btn" onclick="startQuestionTimer()">开始</button>
+      </div>
+    </div>
+        
+        <!-- 回答计时器 -->
+       <div>
+      <div class="timer-title answer-title">回答</div>
+      <div class="timer-display" id="answer-timer">00:15</div>
+      <div class="inquisition-controls">
+        <button class="timer-btn reset-btn" onclick="resetAnswerTimer()">重置</button>
+        <button class="timer-btn start-btn" onclick="startAnswerTimer()">开始</button>
+      </div>
+    </div>
+  </div>
+  
+
+  <audio id="alert-sound"></audio>
+  <audio id="jazz-player" loop>
+    <source src="assets/sounds/jazz.mp3" type="audio/mpeg" />
+  </audio>
+  
+  <script>
+    const SCENES = [
+      { name: "开始", time: 1, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png", alerts: [] },
+      { name: "正方一辩申论", time: 180, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png",
+        alerts: [{time: 30, sound: "assets/sounds/30s.mp3"}, {time: 0, sound: "assets/sounds/Dindin.mp3"}] },
+      { name: "反方二辩提问正方一辩", time: 50, type: "inquisition", questionTime: 10, answerTime: 15, rounds: 2, 
+        background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png", alerts: [] },
+      { name: "反方一辩申论", time: 180, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png",
+        alerts: [{time: 30, sound: "assets/sounds/30s.mp3"}, {time: 0, sound: "assets/sounds/Dindin.mp3"}] },
+      { name: "正方三辩提问反方一辩", time: 50, type: "inquisition", questionTime: 10, answerTime: 15, rounds: 2, 
+        background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png", alerts: [] },
+      { name: "正方二辩申论", time: 180, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png",
+        alerts: [{time: 30, sound: "assets/sounds/30s.mp3"}, {time: 0, sound: "assets/sounds/Dindin.mp3"}] },
+      { name: "反方三辩提问正方二辩", time: 50, type: "inquisition", questionTime: 10, answerTime: 15, rounds: 2, 
+        background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png", alerts: [] },
+      { name: "反方二辩申论", time: 180, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png",
+        alerts: [{time: 30, sound: "assets/sounds/30s.mp3"}, {time: 0, sound: "assets/sounds/Dindin.mp3"}] },
+      { name: "正方一辩提问反方二辩", time: 50, type: "inquisition", questionTime: 10, answerTime: 15, rounds: 2, 
+        background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png", alerts: [] },
+      { name: "正方三辩申论", time: 180, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png",
+        alerts: [{time: 30, sound: "assets/sounds/30s.mp3"}, {time: 0, sound: "assets/sounds/Dindin.mp3"}] },
+      { name: "反方一辩提问正方三辩", time: 50, type: "inquisition", questionTime: 10, answerTime: 15, rounds: 2, 
+        background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png", alerts: [] },
+      { name: "反方三辩申论", time: 180, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png",
+        alerts: [{time: 30, sound: "assets/sounds/30s.mp3"}, {time: 0, sound: "assets/sounds/Dindin.mp3"}] },
+      { name: "正方二辩提问反方三辩", time: 50, type: "inquisition", questionTime: 10, answerTime: 15, rounds: 2, 
+        background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png", alerts: [] },
+      { name: "中休", time: 120, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png",
+        alerts: [{time: 30, sound: "assets/sounds/30s.mp3"}, {time: 0, sound: "assets/sounds/Dindin.mp3"}] },
+      { name: "正方一辩总结", time: 180, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png",
+        alerts: [{time: 30, sound: "assets/sounds/30s.mp3"}, {time: 0, sound: "assets/sounds/Dindin.mp3"}] },
+      { name: "反方一辩总结", time: 180, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png",
+        alerts: [{time: 30, sound: "assets/sounds/30s.mp3"}, {time: 0, sound: "assets/sounds/Dindin.mp3"}] },
+      { name: "评审缓冲", time: 600, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png", alerts: [] },
+      { name: "点评", time: 600, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png",
+        alerts: [{time: 30, sound: "assets/sounds/30s.mp3"}, {time: 0, sound: "assets/sounds/Dindin.mp3"}] },
+      { name: "补充", time: 120, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png",
+        alerts: [{time: 30, sound: "assets/sounds/30s.mp3"}, {time: 0, sound: "assets/sounds/Dindin.mp3"}] },
+      { name: "赛果公布", time: 600, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png", alerts: [] }
+    ];
+    
+    let currentIndex = 0;
+    let timerInterval = null;
+    let questionTimerInterval = null;
+    let answerTimerInterval = null;
+    let currentTime = 0;
+    let currentQuestionTime = 0;
+    let currentAnswerTime = 0;
+    let totalQuestionTime = 0;
+    let totalAnswerTime = 0;
+    let currentRound = 1;
+    
+    const sceneName = document.getElementById("scene-name");
+    const inquisitionName = document.getElementById("inquisition-name");
+    const roundInfo = document.getElementById("round-info");
+    const timerDisplay = document.getElementById("timer");
+    const questionTimerDisplay = document.getElementById("question-timer");
+    const answerTimerDisplay = document.getElementById("answer-timer");
+    const alertSound = document.getElementById("alert-sound");
+    const startScene = document.getElementById("start-scene");
+    const timerScene = document.getElementById("timer-scene");
+    const inquisitionScene = document.getElementById("inquisition-scene");
+    const jazzPlayer = document.getElementById("jazz-player");
+
+    function formatTime(sec) {
+      const m = String(Math.floor(sec / 60)).padStart(2, '0');
+      const s = String(sec % 60).padStart(2, '0');
+      return `${m}:${s}`;
+    }
+    
+    function updateDisplay() { 
+      timerDisplay.textContent = formatTime(currentTime);
+      
+      // 根据剩余时间改变颜色
+      if (currentTime <= 10) {
+        timerDisplay.className = 'time-critical';
+      } else if (currentTime <= 30) {
+        timerDisplay.className = 'time-warning';
+      } else {
+        timerDisplay.className = '';
+      }
+    }
+    
+    function loadScene(index) {
+      // 清除所有计时器
+      clearInterval(timerInterval);
+      clearInterval(questionTimerInterval);
+      clearInterval(answerTimerInterval);
+      timerInterval = null;
+      questionTimerInterval = null;
+      answerTimerInterval = null;
+      
+      currentIndex = index;
+      const scene = SCENES[index];
+      
+      // 处理特殊场景
+      if (scene.name === "开始") {
+        startScene.style.display = "flex";
+        timerScene.style.display = "none";
+        inquisitionScene.style.display = "none";
+      } else if (scene.type === "inquisition") {
+        startScene.style.display = "none";
+        timerScene.style.display = "none";
+        inquisitionScene.style.display = "block";
+        
+        // 设置质询环节数据
+        inquisitionName.textContent = scene.name;
+        totalQuestionTime = scene.questionTime;
+        totalAnswerTime = scene.answerTime;
+        currentQuestionTime = totalQuestionTime;
+        currentAnswerTime = totalAnswerTime;
+        currentRound = 1;
+        
+        questionTimerDisplay.textContent = formatTime(currentQuestionTime);
+        answerTimerDisplay.textContent = formatTime(currentAnswerTime);
+        roundInfo.textContent = `第${currentRound}/${scene.rounds}轮`;
+        
+        // 重置颜色
+        questionTimerDisplay.className = 'timer-display';
+        answerTimerDisplay.className = 'timer-display';
+      } else {
+        startScene.style.display = "none";
+        timerScene.style.display = "block";
+        inquisitionScene.style.display = "none";
+        
+        sceneName.textContent = scene.name;
+        currentTime = scene.time;
+        updateDisplay();
+      }
+      
+      // 处理背景音乐
+      jazzPlayer.pause();
+      jazzPlayer.currentTime = 0;
+      if (scene.name === "评审缓冲") {
+        jazzPlayer.play();
+      }
+      
+      // 设置背景 - 如果图片不存在，使用默认背景
+      const img = new Image();
+      img.onload = function() {
+        document.body.style.backgroundImage = `url('${scene.background}')`;
+      };
+      img.onerror = function() {
+        document.body.style.backgroundImage = `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect fill="%2337788C" width="100" height="100"/><path fill="%232c3e50" d="M0 0L100 100M100 0L0 100" stroke-width="0.5"/></svg>')`;
+      };
+      img.src = scene.background;
+    }
+    
+    // 常规计时器函数
+    function startTimer() {
+      if (timerInterval) return;
+      
+      timerInterval = setInterval(() => {
+        currentTime--;
+        updateDisplay();
+        
+        // 检查是否需要播放提示音
+        SCENES[currentIndex].alerts.forEach(alert => {
+          if (alert.time === currentTime) {
+            alertSound.src = alert.sound;
+            alertSound.volume = 1.0;
+            alertSound.play().catch(e => console.log("音频播放失败:", e));
+          }
+        });
+        
+        if (currentTime <= 0) {
+          clearInterval(timerInterval);
+          timerInterval = null;
+        }
+      }, 1000);
+    }
+    
+    function pauseTimer() {
+      clearInterval(timerInterval);
+      timerInterval = null;
+    }
+    
+    function resetTimer() {
+      clearInterval(timerInterval);
+      timerInterval = null;
+      currentTime = SCENES[currentIndex].time;
+      updateDisplay();
+    }
+    
+    // 质询环节计时器函数
+    function startQuestionTimer() {
+      if (questionTimerInterval) return;
+      
+      questionTimerInterval = setInterval(() => {
+        currentQuestionTime--;
+        questionTimerDisplay.textContent = formatTime(currentQuestionTime);
+        
+        // 根据剩余时间改变颜色
+        if (currentQuestionTime <= 3) {
+          questionTimerDisplay.className = 'timer-display time-critical';
+        } else if (currentQuestionTime <= 5) {
+          questionTimerDisplay.className = 'timer-display time-warning';
+        }
+        
+        if (currentQuestionTime <= 0) {
+          clearInterval(questionTimerInterval);
+          questionTimerInterval = null;
+          // 提问结束提示音
+          playBeepSound();
+        }
+      }, 1000);
+    }
+    
+    function startAnswerTimer() {
+      if (answerTimerInterval) return;
+      
+      answerTimerInterval = setInterval(() => {
+        currentAnswerTime--;
+        answerTimerDisplay.textContent = formatTime(currentAnswerTime);
+        
+        // 根据剩余时间改变颜色
+        if (currentAnswerTime <= 3) {
+          answerTimerDisplay.className = 'timer-display time-critical';
+        } else if (currentAnswerTime <= 5) {
+          answerTimerDisplay.className = 'timer-display time-warning';
+        }
+        
+        if (currentAnswerTime <= 0) {
+          clearInterval(answerTimerInterval);
+          answerTimerInterval = null;
+          // 回答结束提示音
+          playBeepSound();
+          
+          // 如果还有下一轮，准备下一轮
+          const scene = SCENES[currentIndex];
+          if (currentRound < scene.rounds) {
+            currentRound++;
+            resetQuestionTimer();
+            resetAnswerTimer();
+            roundInfo.textContent = `第${currentRound}/${scene.rounds}轮`;
+          }
+        }
+      }, 1000);
+    }
+    
+    function resetQuestionTimer() {
+      clearInterval(questionTimerInterval);
+      questionTimerInterval = null;
+      currentQuestionTime = totalQuestionTime;
+      questionTimerDisplay.textContent = formatTime(currentQuestionTime);
+      questionTimerDisplay.className = 'timer-display';
+    }
+    
+    function resetAnswerTimer() {
+      clearInterval(answerTimerInterval);
+      answerTimerInterval = null;
+      currentAnswerTime = totalAnswerTime;
+      answerTimerDisplay.textContent = formatTime(currentAnswerTime);
+      answerTimerDisplay.className = 'timer-display';
+    }
+    
+    function nextScene() {
+      if (currentIndex < SCENES.length - 1) {
+        loadScene(currentIndex + 1);
+      }
+    }
+    
+    function prevScene() {
+      if (currentIndex > 0) {
+        loadScene(currentIndex - 1);
+      }
+    }
+    
+    function startDebate() {
+      loadScene(1); // 跳转到第一个计时场景（申论）
+    }
+    
+    function playBeepSound() {
+      // 在实际应用中，这里可以播放提示音
+      console.log("播放提示音");
+      // 简单的浏览器蜂鸣声模拟
+      try {
+        const context = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = context.createOscillator();
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(800, context.currentTime);
+        oscillator.connect(context.destination);
+        oscillator.start();
+        oscillator.stop(context.currentTime + 0.1);
+      } catch (e) {
+        console.log("音频上下文不支持");
+      }
+    }
+    
+    // 初始化
+    loadScene(0);
+    
+    // 键盘快捷键支持
+    document.addEventListener('keydown', function(e) {
+      const scene = SCENES[currentIndex];
+      
+      if (scene.type === "inquisition") {
+        // 质询环节快捷键
+        switch(e.key) {
+          case 'q':
+          case 'Q':
+            startQuestionTimer();
+            break;
+          case 'a':
+          case 'A':
+            startAnswerTimer();
+            break;
+          case 'r':
+          case 'R':
+            resetQuestionTimer();
+            resetAnswerTimer();
+            break;
+          case 'ArrowRight':
+            nextScene();
+            break;
+          case 'ArrowLeft':
+            prevScene();
+            break;
+        }
+      } else {
+        // 常规环节快捷键
+        switch(e.key) {
+          case ' ':
+            if (timerInterval) {
+              pauseTimer();
+            } else {
+              startTimer();
+            }
+            break;
+          case 'ArrowRight':
+            nextScene();
+            break;
+          case 'ArrowLeft':
+            prevScene();
+            break;
+          case 'r':
+          case 'R':
+            if (scene.type === "normal") resetTimer();
+            break;
+        }
+      }
+    });
+  </script>
+</body>
+</html>
