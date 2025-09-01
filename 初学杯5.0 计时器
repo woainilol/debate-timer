@@ -521,40 +521,43 @@
     const SCENES = [
       { name: "开始", time: 1, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png", alerts: [] },
       { name: "正方一辩申论", time: 180, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png",
-        alerts: [{time: 30, sound: "assets/sounds/30s.mp3"}, {time: 0, sound: "assets/sounds/Dindin.mp3"}] },
+        alerts: [{time: 30, sound: "assets_sounds_30s.mp3"}, {time: 0, sound: "assets_sounds_Dindin (1).mp3"}] },
       { name: "反方二辩提问正方一辩", time: 50, type: "inquisition", questionTime: 10, answerTime: 15, rounds: 2, 
         background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png", alerts: [] },
       { name: "反方一辩申论", time: 180, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png",
-        alerts: [{time: 30, sound: "assets/sounds/30s.mp3"}, {time: 0, sound: "assets/sounds/Dindin.mp3"}] },
+        alerts: [{time: 30, sound: "assets_sounds_30s.mp3"}, {time: 0, sound: "assets_sounds_Dindin (1).mp3"}] },
       { name: "正方三辩提问反方一辩", time: 50, type: "inquisition", questionTime: 10, answerTime: 15, rounds: 2, 
         background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png", alerts: [] },
       { name: "正方二辩申论", time: 180, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png",
-        alerts: [{time: 30, sound: "assets/sounds/30s.mp3"}, {time: 0, sound: "assets/sounds/Dindin.mp3"}] },
+        alerts: [{time: 30, sound: "assets_sounds_30s.mp3"}, {time: 0, sound: "assets_sounds_Dindin (1).mp3"}] },
       { name: "反方三辩提问正方二辩", time: 50, type: "inquisition", questionTime: 10, answerTime: 15, rounds: 2, 
         background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png", alerts: [] },
       { name: "反方二辩申论", time: 180, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png",
-        alerts: [{time: 30, sound: "assets/sounds/30s.mp3"}, {time: 0, sound: "assets/sounds/Dindin.mp3"}] },
+        alerts: [{time: 30, sound: "assets_sounds_30s.mp3"}, {time: 0, sound: "assets_sounds_Dindin (1).mp3"}] },
       { name: "正方一辩提问反方二辩", time: 50, type: "inquisition", questionTime: 10, answerTime: 15, rounds: 2, 
         background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png", alerts: [] },
       { name: "正方三辩申论", time: 180, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png",
-        alerts: [{time: 30, sound: "assets/sounds/30s.mp3"}, {time: 0, sound: "assets/sounds/Dindin.mp3"}] },
+        alerts: [{time: 30, sound: "assets_sounds_30s.mp3"}, {time: 0, sound: "assets_sounds_Dindin (1).mp3"}] },
       { name: "反方一辩提问正方三辩", time: 50, type: "inquisition", questionTime: 10, answerTime: 15, rounds: 2, 
         background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png", alerts: [] },
       { name: "反方三辩申论", time: 180, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png",
-        alerts: [{time: 30, sound: "assets/sounds/30s.mp3"}, {time: 0, sound: "assets/sounds/Dindin.mp3"}] },
+        alerts: [{time: 30, sound: "assets_sounds_30s.mp3"}, {time: 0, sound: "assets_sounds_Dindin (1).mp3"}] },
       { name: "正方二辩提问反方三辩", time: 50, type: "inquisition", questionTime: 10, answerTime: 15, rounds: 2, 
         background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png", alerts: [] },
       { name: "中休", time: 120, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png",
-        alerts: [{time: 30, sound: "assets/sounds/30s.mp3"}, {time: 0, sound: "assets/sounds/Dindin.mp3"}] },
+        alerts: [{time: 30, sound: "assets_sounds_30s.mp3"}, {time: 0, sound: "assets_sounds_Dindin (1).mp3"}] },
       { name: "正方一辩总结", time: 180, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png",
-        alerts: [{time: 30, sound: "assets/sounds/30s.mp3"}, {time: 0, sound: "assets/sounds/Dindin.mp3"}] },
+        alerts: [{time: 30, sound: "assets_sounds_30s.mp3"}, {time: 0, sound: "assets_sounds_Dindin (1).mp3"}] },
       { name: "反方一辩总结", time: 180, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png",
-        alerts: [{time: 30, sound: "assets/sounds/30s.mp3"}, {time: 0, sound: "assets/sounds/Dindin.mp3"}] },
-      { name: "评审缓冲", time: 600, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png", alerts: [] },
+        alerts: [{time: 30, sound: "assets_sounds_30s.mp3"}, {time: 0, sound: "assets_sounds_Dindin (1).mp3"}] },
+      { name: "评审缓冲", time: 600, type: "normal", background: "assets_sounds_jazz.mp3", alerts: [] },
       { name: "点评", time: 600, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png",
-        alerts: [{time: 30, sound: "assets/sounds/30s.mp3"}, {time: 0, sound: "assets/sounds/Dindin.mp3"}] },
+        alerts: [{time: 30, sound: "assets_sounds_30s.mp3"}, {time: 115, sound: "assets_sounds_Dindin (1).mp3"}] },
       { name: "补充", time: 120, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png",
-        alerts: [{time: 30, sound: "assets/sounds/30s.mp3"}, {time: 0, sound: "assets/sounds/Dindin.mp3"}] },
+  alerts: [
+    {time: 30, sound: "assets_sounds_30s.mp3"},
+  ]
+},
       { name: "赛果公布", time: 600, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png", alerts: [] }
     ];
     
@@ -667,39 +670,30 @@
     
     // 常规计时器函数
     function startTimer() {
-      if (timerInterval) return;
-      
-      timerInterval = setInterval(() => {
-        currentTime--;
-        updateDisplay();
-        
-        // 检查是否需要播放提示音
-        SCENES[currentIndex].alerts.forEach(alert => {
-          if (alert.time === currentTime) {
-            alertSound.src = alert.sound;
-            alertSound.volume = 1.0;
-            alertSound.play().catch(e => console.log("音频播放失败:", e));
-          }
-        });
-        
-        if (currentTime <= 0) {
-          clearInterval(timerInterval);
-          timerInterval = null;
+  if (timerInterval) return;
+
+  timerInterval = setInterval(() => {
+    currentTime--;
+    updateDisplay();
+
+    const scene = SCENES[currentIndex];
+    // 只在非“开始”且非“质询”环节处理提示音
+    if (scene.name !== "开始" && scene.type !== "inquisition") {
+      scene.alerts.forEach(alert => {
+        if (alert.time === currentTime) {
+          alertSound.src = alert.sound;
+          alertSound.volume = 1.0;
+          alertSound.play().catch(e => console.log("音频播放失败:", e));
         }
-      }, 1000);
+      });
     }
-    
-    function pauseTimer() {
+
+    if (currentTime <= 0) {
       clearInterval(timerInterval);
       timerInterval = null;
     }
-    
-    function resetTimer() {
-      clearInterval(timerInterval);
-      timerInterval = null;
-      currentTime = SCENES[currentIndex].time;
-      updateDisplay();
-    }
+  }, 1000);
+}
     
     // 质询环节计时器函数
     function startQuestionTimer() {
@@ -862,3 +856,4 @@
   </script>
 </body>
 </html>
+
