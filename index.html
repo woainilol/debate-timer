@@ -519,7 +519,7 @@
   
   <script>
     const SCENES = [
-      { name: "开始", time: 1, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png", alerts: [] },
+          { name: "开始", time: 1, type: "normal", background: "assets/backgrounds/37788c1d-03fc-4460-9826-2cfc87ed6c51.png", alerts: [] },
       { name: "正方一辩申论", time: 180, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png",
         alerts: [{time: 30, sound: "assets_sounds_30s.mp3"}, {time: 0, sound: "assets_sounds_Dindin (1).mp3"}] },
       { name: "反方二辩提问正方一辩", time: 50, type: "inquisition", questionTime: 10, answerTime: 15, rounds: 2, 
@@ -550,9 +550,9 @@
         alerts: [{time: 30, sound: "assets_sounds_30s.mp3"}, {time: 0, sound: "assets_sounds_Dindin (1).mp3"}] },
       { name: "反方一辩总结", time: 180, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png",
         alerts: [{time: 30, sound: "assets_sounds_30s.mp3"}, {time: 0, sound: "assets_sounds_Dindin (1).mp3"}] },
-      { name: "评审缓冲", time: 600, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png", alerts: {},
+      { name: "评审缓冲", time: 600, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png", alerts: [] },
       { name: "点评", time: 600, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png",
-        alerts: [{time: 30, sound: "assets_sounds_30s.mp3"}, {time: 115, sound: "assets_sounds_Dindin (1).mp3"}] },
+        alerts: [] },
       { name: "补充", time: 120, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png",
   alerts: [
     {time: 30, sound: "assets_sounds_30s.mp3"},
@@ -651,11 +651,13 @@
       }
       
       // 处理背景音乐
-     jazzPlayer.pause();
-jazzPlayer.currentTime = 0;
-if (scene.name === "评审缓冲") {
-  jazzPlayer.volume = 1.0;
-  jazzPlayer.play().catch(e => console.log("音频播放失败:", e));
+      jazzPlayer.pause();
+  jazzPlayer.currentTime = 0;
+  if (scene.name === "评审缓冲") {
+    jazzPlayer.play();
+  }
+
+  // ...existing code...
 }
       
       // 设置背景 - 如果图片不存在，使用默认背景
@@ -667,7 +669,7 @@ if (scene.name === "评审缓冲") {
         document.body.style.backgroundImage = `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect fill="%2337788C" width="100" height="100"/><path fill="%232c3e50" d="M0 0L100 100M100 0L0 100" stroke-width="0.5"/></svg>')`;
       };
       img.src = scene.background;
-    }
+    
     
     // 常规计时器函数
     function startTimer() {
@@ -857,6 +859,7 @@ if (scene.name === "评审缓冲") {
   </script>
 </body>
 </html>
+
 
 
 
