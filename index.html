@@ -651,10 +651,11 @@
       }
       
       // 处理背景音乐
-      jazzPlayer.pause();
+     jazzPlayer.pause();
 jazzPlayer.currentTime = 0;
 if (scene.name === "评审缓冲") {
-  jazzPlayer.play();
+  jazzPlayer.volume = 1.0;
+  jazzPlayer.play().catch(e => console.log("音频播放失败:", e));
 }
       
       // 设置背景 - 如果图片不存在，使用默认背景
@@ -856,6 +857,7 @@ if (scene.name === "评审缓冲") {
   </script>
 </body>
 </html>
+
 
 
 
