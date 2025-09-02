@@ -5,9 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>辩论计时器</title>
   <style>
-        .container {
-      background-image:url(https://sdmntprwestus3.oaiusercontent.com/files/00000000-fdfc-61fd-8360-4fd389c1385c/raw?se=2025-09-02T11%3A28%3A56Z&sp=r&sv=2024-08-04&sr=b&scid=cdf3666a-b58c-5789-aebe-811c655024a0&skoid=03727f49-62d3-42ac-8350-1c0e6559d238&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-09-02T00%3A04%3A44Z&ske=2025-09-03T00%3A04%3A44Z&sks=b&skv=2024-08-04&sig=blQ8tIXqIqZUVpVxPXuaKbVD4Q6miSWe5oyYU/sbZ14%3D);
-        }
+    /* 样式保持不变 */
+    .container {
+      background-image:url(file:///C:/Users/user/Downloads/background_1920x1080.png);
+    }
     :root {
       --primary-color: #b84730;
       --secondary-color: #2c3e50;
@@ -574,6 +575,7 @@
     let totalQuestionTime = 0;
     let totalAnswerTime = 0;
     let currentRound = 1;
+    let isPaused = false;
     
     const sceneName = document.getElementById("scene-name");
     const inquisitionName = document.getElementById("inquisition-name");
@@ -614,6 +616,7 @@
       timerInterval = null;
       questionTimerInterval = null;
       answerTimerInterval = null;
+      isPaused = false;
       
       currentIndex = index;
       const scene = SCENES[index];
@@ -655,51 +658,57 @@
       
       // 处理背景音乐
       jazzPlayer.pause();
-  jazzPlayer.currentTime = 0;
-  if (scene.name === "评审缓冲") {
-    jazzPlayer.play();
-  }
-
-  // ...existing code...
-}
-      
-      // 设置背景 - 如果图片不存在，使用默认背景
-      const img = new Image();
-      img.onload = function() {
-        document.body.style.backgroundImage = `url('${scene.background}')`;
-      };
-      img.onerror = function() {
-        document.body.style.backgroundImage = `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect fill="%2337788C" width="100" height="100"/><path fill="%232c3e50" d="M0 0L100 100M100 0L0 100" stroke-width="0.5"/></svg>')`;
-      };
-      img.src = scene.background;
-    
+      jazzPlayer.currentTime = 0;
+      if (scene.name === "评审缓冲") {
+        jazzPlayer.play();
+      }
+    }
     
     // 常规计时器函数
     function startTimer() {
-  if (timerInterval) return;
+      if (timerInterval) return;
+      
+      isPaused = false;
+      timerInterval = setInterval(() => {
+        currentTime--;
+        updateDisplay();
 
-  timerInterval = setInterval(() => {
-    currentTime--;
-    updateDisplay();
-
-    const scene = SCENES[currentIndex];
-    // 只在非“开始”且非“质询”环节处理提示音
-    if (scene.name !== "开始" && scene.type !== "inquisition") {
-      scene.alerts.forEach(alert => {
-        if (alert.time === currentTime) {
-          alertSound.src = alert.sound;
-          alertSound.volume = 1.0;
-          alertSound.play().catch(e => console.log("音频播放失败:", e));
+        const scene = SCENES[currentIndex];
+        // 只在非"开始"且非"质询"环节处理提示音
+        if (scene.name !== "开始" && scene.type !== "inquisition") {
+          scene.alerts.forEach(alert => {
+            if (alert.time === currentTime) {
+              alertSound.src = alert.sound;
+              alertSound.volume = 1.0;
+              alertSound.play().catch(e => console.log("音频播放失败:", e));
+            }
+          });
         }
-      });
-    }
 
-    if (currentTime <= 0) {
+        if (currentTime <= 0) {
+          clearInterval(timerInterval);
+          timerInterval = null;
+        }
+      }, 1000);
+    }
+    
+    function pauseTimer() {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+        isPaused = true;
+      }
+    }
+    
+    function resetTimer() {
       clearInterval(timerInterval);
       timerInterval = null;
+      isPaused = false;
+      
+      const scene = SCENES[currentIndex];
+      currentTime = scene.time;
+      updateDisplay();
     }
-  }, 1000);
-}
     
     // 质询环节计时器函数
     function startQuestionTimer() {
@@ -862,7 +871,6 @@
   </script>
 </body>
 </html>
-
 
 
 
