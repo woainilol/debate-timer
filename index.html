@@ -172,16 +172,19 @@
     /* 计时页面样式 */
     #timer-scene {
       font-family: "Microsoft YaHei", "微软雅黑", "PingFang SC", "Source Han Sans", sans-serif;
+       
       display: none;
       width: 100%;
       max-width: 800px;
     }
     
     #scene-name {
-      font-size: 5.0em;
-      font-weight: bold;
-      margin-bottom: 10px;s
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+         font-family: "Microsoft YaHei", "微软雅黑", "PingFang SC", "Source Han Sans", sans-serif;
+  font-size: 5em;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+
     }
     
    
@@ -195,6 +198,7 @@
   margin: 30px 0;     /* 上下留白 */
     border-radius: 3px; /* 轻微圆角，看起来不那么生硬，可以去掉 */
 }
+
 
     #timer {
       font-size: 11.5em;
@@ -250,14 +254,29 @@
     }
     
     #debat-topic {
+ margin-left: -60px;   /* 靠左对齐 */
       font-family: "SimSun", "宋体", serif;
       font-size: 2.25em;
       margin-top: 20px;
       padding: 15px;
+      white-space: nowrap; /* 不换行 */
+      border-radius: 20px;
+      
      
-      border-radius: 8px;
     }
     
+    #debatee-topic {
+ margin-left: -10px;   /* 靠左对齐 */
+      font-family: "SimSun", "宋体", serif;
+      font-size: 2.25em;
+      margin-top: 20px;
+      padding: 15px;
+      white-space: nowrap; /* 不换行 */
+      border-radius: 20px;
+      
+     
+    }
+
     /* 双计时器样式 - 质询环节专用 */
     #inquisition-scene {
       display: none;
@@ -266,7 +285,7 @@
     }
     #inquisition-name {
       font-family: "Microsoft YaHei", "微软雅黑", "PingFang SC", "Source Han Sans", sans-serif;
-  font-size: 3em;
+  font-size: 5em;
   font-weight: bold;
   margin-bottom: 10px;
   text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
@@ -274,11 +293,23 @@
 #debate-topic,
 #inquisition-topic {
  
-  font-size: 2em;
+  font-size: 9em;
   font-weight: bold;
 }
+.linee {
+ 
+       position: relative;
+  left: -15%;         /* 向左延伸一点 */
+  width: 130%;        /* 比 100% 再长，超出页面 */
+  height: 4px;        /* 粗度 */
+  background: white;  /* 纯白色 */
+  margin: 30px 0;     /* 上下留白 */
+    border-radius: 3px; /* 轻微圆角，看起来不那么生硬，可以去掉 */
+}
+
+
     .double-timer {
-      font-family: "SimSun", "宋体", serif;
+      font-family: "Microsoft YaHei", "微软雅黑", "PingFang SC", "Source Han Sans", sans-serif;
       display: flex;
       justify-content: space-around;
       gap: 30px;
@@ -305,10 +336,12 @@
     }
     
     .question-timer {
+      font-size: 3em;
       border-top: 5px solid var(--question-color);
     }
     
     .answer-timer {
+      font-size: 3em;
       border-top: 5px solid var(--answer-color);
     }
     
@@ -320,15 +353,21 @@
     }
     
     .question-title {
-      color: var(--question-color);
-    }
+     font-family: "Microsoft YaHei", "微软雅黑", "PingFang SC", "Source Han Sans", sans-serif;
+  font-size: 3em;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);}
     
-    .answer-title {
-      color: var(--answer-color);
-    }
+    .answer-title {font-family: "Microsoft YaHei", "微软雅黑", "PingFang SC", "Source Han Sans", sans-serif;
+  font-size: 3em;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);}
+      
     
     .timer-display {
-      font-size: 4.5rem;
+      font-size: 8rem;
       font-weight: bold;
       margin: 20px 0;
       font-variant-numeric: tabular-nums;
@@ -345,7 +384,7 @@
     
     .round-info {
       font-family: "SimSun", "宋体", serif;
-      font-size: 1.2rem;
+      font-size: 3rem;
       margin: 15px 0;
       color: var(--accent-color);
     }
@@ -448,7 +487,7 @@
   background-color: #8b8b8b !important;
 }
 .round-info {
-  font-size: 1.2rem;
+  font-size: 2rem;
   margin: 15px 0;
   color: #ffffff; /* 这里设置你想要的颜色，比如橙色 */
 }
@@ -479,7 +518,7 @@
         <div class="match-info">
           <div class="match-type">友谊赛</div>
           <div class="debate-topic">
-            价值型辩题/政策型辩题<br />是更好的辩论入门题型
+        辩论赛各赛段中，重复同题/更换新题<br/>更能促进辩手成长
           </div>
         </div>
       </div>
@@ -503,41 +542,60 @@
       
    <div class="line"></div>
    <br/>
-  <div id="debat-topic">价值型辩题/政策型辩题是更好的辩论入门题型</div>
+  <div id="debat-topic">辩论赛各赛段中，重复同题/更换新题更能促进辩手成长</div>
     
   
     </div>
-    <!-- 质询环节双计时器页面 -->
-    <div id="inquisition-scene">
-      <div id="inquisition-name"></div>
-      <div class="round-info" id="round-info">1/2</div>
-      <div class="line"></div>
-      <div class="double-timer">
-        
-        
-        <!-- 提问计时器 -->
-        <div>
+
+  
+<div id="inquisition-scene">
+  <div id="inquisition-name"></div>
+  <div class="round-info" id="round-info">1/2</div>
+  <div class="linee"></div>
+
+  <div class="double-timer">
+    
+    <!-- 提问计时器 -->
+    <div>
       <div class="timer-title question-title">提问</div>
       <div class="timer-display" id="question-timer">00:10</div>
       <div class="inquisition-controls">
         <button class="timer-btn reset-btn" onclick="resetQuestionTimer()">重置</button>
         <button class="timer-btn start-btn" onclick="startQuestionTimer()">开始</button>
       </div>
-      
     </div>
-        
-        <!-- 回答计时器 -->
-       <div>
+
+    <!-- 回答计时器 -->
+    <div>
       <div class="timer-title answer-title">回答</div>
       <div class="timer-display" id="answer-timer">00:15</div>
       <div class="inquisition-controls">
         <button class="timer-btn reset-btn" onclick="resetAnswerTimer()">重置</button>
         <button class="timer-btn start-btn" onclick="startAnswerTimer()">开始</button>
       </div>
-      
     </div>
-<div class="line"></div>
   </div>
+
+  <!-- 在两个计时器的下方统一加一条线 -->
+   <br/>
+  <div class="linee"></div>
+  <br/>
+    <div id="debatee-topic">辩论赛各赛段中，重复同题/更换新题更能促进辩手成长</div>
+</div>
+
+
+    
+    
+      
+        
+    
+    
+    
+  
+    
+      
+
+  
   
 
   <audio id="alert-sound"></audio>
@@ -895,8 +953,6 @@
   </script>
 </body>
 </html>
-
-
 
 
 
