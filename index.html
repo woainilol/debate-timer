@@ -7,7 +7,7 @@
   <style>
     /* 样式保持不变 */
     .container {
-      background-image:url(https://share.google/iDUan0UYVmbfG4UCl);
+      background-image:url(https://thumb.photo-ac.com/d1/d10679948120a8d7914b64a5fe03fde7_t.jpeg);
     }
     :root {
       --primary-color: #b84730;
@@ -192,7 +192,7 @@
  
        position: relative;
   left: -30%;         /* 向左延伸一点 */
-  width: 160%;        /* 比 100% 再长，超出页面 */
+  width: 140%;        /* 比 100% 再长，超出页面 */
   height: 4px;        /* 粗度 */
   background: white;  /* 纯白色 */
   margin: 30px 0;     /* 上下留白 */
@@ -283,12 +283,15 @@
       width: 100%;
       max-width: 1000px;
     }
-    #inquisition-name {
-      font-family: "Microsoft YaHei", "微软雅黑", "PingFang SC", "Source Han Sans", sans-serif;
+   #inquisition-name {
+  font-family: "Microsoft YaHei", "微软雅黑", "PingFang SC", "Source Han Sans", sans-serif;
   font-size: 5em;
   font-weight: bold;
-  margin-bottom: 10px;
   text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  text-align: center;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
 }
 #debate-topic,
 #inquisition-topic {
@@ -514,11 +517,11 @@
     <!-- 开始页面 -->
     <div id="start-scene">
       <div class="start-content">
-        <div class="tournament-badge">初学杯</div>
+        <div class="tournament-badge">华中杯</div>
         <div class="match-info">
           <div class="match-type">友谊赛</div>
           <div class="debate-topic">
-        辩论赛各赛段中，重复同题/更换新题<br/>更能促进辩手成长
+    马来西亚应订立反仇恨言论法
           </div>
         </div>
       </div>
@@ -542,7 +545,7 @@
       
    <div class="line"></div>
    <br/>
-  <div id="debat-topic">辩论赛各赛段中，重复同题/更换新题更能促进辩手成长</div>
+  <div id="debat-topic">马来西亚应订立反仇恨言论法</div>
     
   
     </div>
@@ -606,35 +609,30 @@
   <script>
     const SCENES = [
           { name: "开始", time: 1, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png", alerts: [] },
-      { name: "正方一辩申论", time: 240, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png",
+      { name: "申论", time: 240, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png",
         alerts: [{time: 30, sound: "assets_sounds_30s.mp3"}, {time: 0, sound: "assets_sounds_Dindin (1).mp3"}] },
-      { name: "反方二辩提问正方一辩", time: 50, type: "inquisition", questionTime: 10, answerTime: 15, rounds: 2, 
-        background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png", alerts: [] },
-      { name: "反方一辩申论", time: 180, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png",
+      { name: "质询", time: 180, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png", alerts: [] },
+      { name: "申论", time: 240, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png",
         alerts: [{time: 30, sound: "assets_sounds_30s.mp3"}, {time: 0, sound: "assets_sounds_Dindin (1).mp3"}] },
-      { name: "正方三辩提问反方一辩", time: 50, type: "inquisition", questionTime: 10, answerTime: 15, rounds: 2, 
-        background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png", alerts: [] },
-      { name: "正方二辩申论", time: 180, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png",
+      { name: "质询", time: 180, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png", alerts: [] },
+      { name: "申论", time: 240, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png",
         alerts: [{time: 30, sound: "assets_sounds_30s.mp3"}, {time: 0, sound: "assets_sounds_Dindin (1).mp3"}] },
-      { name: "反方三辩提问正方二辩", time: 50, type: "inquisition", questionTime: 10, answerTime: 15, rounds: 2, 
-        background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png", alerts: [] },
-      { name: "反方二辩申论", time: 180, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png",
+      { name: "质询", time: 180, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png", alerts: [] },
+        
+      { name: "申论", time: 240, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png",
         alerts: [{time: 30, sound: "assets_sounds_30s.mp3"}, {time: 0, sound: "assets_sounds_Dindin (1).mp3"}] },
-      { name: "正方一辩提问反方二辩", time: 50, type: "inquisition", questionTime: 10, answerTime: 15, rounds: 2, 
-        background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png", alerts: [] },
-      { name: "正方三辩申论", time: 180, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png",
+      { name: "质询", time: 180, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png", alerts: [] },
+      { name: "申论", time: 240, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png",
         alerts: [{time: 30, sound: "assets_sounds_30s.mp3"}, {time: 0, sound: "assets_sounds_Dindin (1).mp3"}] },
-      { name: "执政党二辩质询反对党二辩", time: 50, type: "inquisition", questionTime: 10, answerTime: 15, rounds: 2, 
-        background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png", alerts: [] },
-      { name: "反方三辩申论", time: 180, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png",
+      { name: "质询", time: 180, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png", alerts: [] },
+      { name: "申论", time: 240, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png",
         alerts: [{time: 30, sound: "assets_sounds_30s.mp3"}, {time: 0, sound: "assets_sounds_Dindin (1).mp3"}] },
-      { name: "正方二辩提问反方三辩", time: 50, type: "inquisition", questionTime: 10, answerTime: 15, rounds: 2, 
-        background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png", alerts: [] },
+      { name: "质询", time: 180, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png", alerts: [] },
       { name: "中休", time: 120, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png",
         alerts: [{time: 30, sound: "assets_sounds_30s.mp3"}, {time: 0, sound: "assets_sounds_Dindin (1).mp3"}] },
-      { name: "正方一辩总结", time: 180, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png",
+      { name: "反对党总结", time: 240, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png",
         alerts: [{time: 30, sound: "assets_sounds_30s.mp3"}, {time: 0, sound: "assets_sounds_Dindin (1).mp3"}] },
-      { name: "反方一辩总结", time: 180, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png",
+      { name: "执政党总结", time: 240, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png",
         alerts: [{time: 30, sound: "assets_sounds_30s.mp3"}, {time: 0, sound: "assets_sounds_Dindin (1).mp3"}] },
       { name: "评审缓冲", time: 600, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png", alerts: [] },
       { name: "点评", time: 600, type: "normal", background: "37788c1d-03fc-4460-9826-2cfc87ed6c51.png",
@@ -953,6 +951,7 @@
   </script>
 </body>
 </html>
+
 
 
 
